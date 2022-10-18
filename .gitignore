@@ -1,0 +1,4 @@
+*.o
+*.out
+/lib/libmemflow_ffi.a
+dumpm/*
