@@ -28,7 +28,6 @@ void get_process(){
 
 		return true;
 	});
-
 }
 
 int open_targetprocess(std::string &targetprocess, ProcessInstance<CBox<void>, CArc<void>> &proc){
@@ -140,6 +139,7 @@ int main(int argc, char *argv[]) {
 		std::cout << "{wm str}: writememory str=>addr \\n value" << std::endl;
 		std::cout << "{wm all}: writememory all hits=>value" << std::endl;
 		std::cout << "{dump}: dumpmemory ???" << std::endl;
+		std::cout << "{dump all}: dumpmemory ???" << std::endl;
 		std::cout << "{v}: view hit" << std::endl;
 		std::getline(std::cin >> std::ws, c);
 
@@ -246,6 +246,12 @@ int main(int argc, char *argv[]) {
 			std::cin >> std::hex >> u32 ;
 			search.dumpmemory(addr,u32);
 			system(("xxd -u -l 500 -g 1 dumpm/" + std::to_string(addr)).c_str());
+			break;
+		case str2int("da"):
+		case str2int("dump all"):
+			std::cout << "start dump" << std::endl;
+			search.dumpmemoryall();
+			std::cout << "dumped" << std::endl;
 			break;
 		case str2int("v"):
 		case str2int("viewhit"):

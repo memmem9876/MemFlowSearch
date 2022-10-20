@@ -5,6 +5,8 @@
 #include <fstream>
 #include <filesystem>
 #include <string>
+#include <sstream>
+#include <ctime>
 
 class Search
 {
@@ -23,6 +25,7 @@ public:
 	template <typename T>
 	int writememory(uint64_t addr, T bytes);
 	bool dumpmemory(uint64_t addr, uint64_t size);
+	bool dumpmemoryall();
 
 	template <typename T>
 	int checkarray(uint8_t *buf, int size, T bytes, uint64_t baseaddr);
@@ -50,7 +53,6 @@ public:
 
 bool Search::dumpmemory(uint64_t addr, uint64_t size)
 {
-
 	CSliceMut<uint8_t> buf;
 	buf.data = new u_int8_t[size];
 	buf.len = size;
@@ -67,6 +69,43 @@ bool Search::dumpmemory(uint64_t addr, uint64_t size)
 	of.write((const char *)buf.data, size);
 	of.close();
 	delete buf.data;
+	return 1;
+}
+
+bool Search::dumpmemoryall()
+{
+	std::filesystem::create_directory("dumpm");
+	std::filesystem::create_directory("dumpm/all");
+	std::ofstream of,of0;
+	std::time_t t = std::time(nullptr);
+    std::tm* now = std::localtime(&t);
+	std::stringstream fname;
+	fname << std::dec << now->tm_year << "_" << now->tm_mon << "_" << now->tm_mday << "_" << now->tm_hour << "_" << now->tm_min << "_" << now->tm_sec;
+	of.open("dumpm/all/"+ fname.str() +".bin", std::ios_base::trunc | std::ios_base::binary);
+	of0.open("dumpm/all/"+ fname.str() +".txt", std::ios_base::trunc);
+	if (!of|!of0)
+	{
+		return 0;
+	}
+	for (auto &&info : this->memory_range_vec)
+	{
+		CSliceMut<uint8_t> buf;
+		buf.data = new u_int8_t[info._1];
+		buf.len = info._1;
+		this->process->read_raw_into(info._0, buf);
+
+		std::stringstream addr,dumpsize;
+		addr << "0x" << std::hex << info._0;
+		dumpsize << "0x" << std::hex << info._1;
+
+		of.write((const char *)buf.data, info._1);
+		of0 << addr.str() + "_" + dumpsize.str() << std::endl;
+		
+		delete buf.data;
+	}
+	of.close();
+	of0.close();
+
 	return 1;
 }
 
