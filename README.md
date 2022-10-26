@@ -63,14 +63,14 @@ make
 ./main.out  
 
 # vscode Setup  
-### vscode server
-sudo wget -O- https://aka.ms/install-vscode-server/setup.sh | sh
-ip -4 a
-#sudo apt install -y gnome-keyring
-dbus-run-session -- sh -c "(echo 'yoursecrethere' | gnome-keyring-daemon --unlock) && code-server serve-local --host 0.0.0.0"
+### vscode server  
+sudo wget -O- https://aka.ms/install-vscode-server/setup.sh | sh  
+ip -4 a  
+#sudo apt install -y gnome-keyring  
+dbus-run-session -- sh -c "(echo 'yoursecrethere' | gnome-keyring-daemon --unlock) && code-server serve-local --host 0.0.0.0"  
 
 #Web UI available at http://192.168.xx.xx:8000/?tkn=8xxxxx-xxxx-xxxx-...  
-#http://192.168.xx.xx:8000/?tkn=xxxxx.....
+#http://192.168.xx.xx:8000/?tkn=xxxxx.....  
 
 
 ### vscode root  
